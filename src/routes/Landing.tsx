@@ -37,12 +37,9 @@ export function Landing() {
           a few high-signal focus areas—so you and anyone you plan with can stay
           aligned without building another spreadsheet.
         </p>
-        <div className="landing__cta stack">
+        <div className="landing__cta">
           <Link className="btn btn--primary" to="/signup">
             Get started
-          </Link>
-          <Link className="btn btn--ghost" to="/signup">
-            Create your account
           </Link>
         </div>
       </header>

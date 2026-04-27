@@ -67,7 +67,7 @@ export function OnboardingWhyScreen({ navigation }: Props) {
       contentContainerStyle={styles.scroll}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.h1}>What brings you to North today?</Text>
+      <Text style={styles.h1}>What brings you to Qapital Atlas today?</Text>
       <Text style={styles.lead}>
         We use this to prioritize what you see first—one choice is enough for now.
       </Text>

@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { clearSession, loadSession } from '../lib/session'
 
-const APP = 'North'
+const APP = 'Qapital Atlas'
 
 export function Shell() {
   const nav = useNavigate()

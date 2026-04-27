@@ -47,7 +47,7 @@ export function OnboardingReasons() {
 
   return (
     <div className="flow">
-      <h1 className="flow__title">What brings you to North today?</h1>
+      <h1 className="flow__title">What brings you to Qapital Atlas today?</h1>
       <p className="flow__lead text-muted">
         We use this to prioritize what you see first—one choice is enough for now.
       </p>

@@ -54,27 +54,27 @@ export function RootNavigator() {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
-        options={{ ...screenDef('North'), headerShown: true }}
+        options={{ ...screenDef('Qapital Atlas'), headerShown: true }}
       />
       <Stack.Screen
         name="OnboardingConnect"
         component={ConnectScreen}
-        options={{ ...screenDef('North'), ...headerSignOut() }}
+        options={{ ...screenDef('Qapital Atlas'), ...headerSignOut() }}
       />
       <Stack.Screen
         name="OnboardingSubscribe"
         component={OnboardingSubscribeScreen}
-        options={{ ...screenDef('North'), ...headerSignOut() }}
+        options={{ ...screenDef('Qapital Atlas'), ...headerSignOut() }}
       />
       <Stack.Screen
         name="OnboardingWhy"
         component={OnboardingWhyScreen}
-        options={{ ...screenDef('North'), ...headerSignOut() }}
+        options={{ ...screenDef('Qapital Atlas'), ...headerSignOut() }}
       />
       <Stack.Screen
         name="Dashboard"
         component={DashboardScreen}
-        options={{ ...screenDef('North'), ...headerSignOut() }}
+        options={{ ...screenDef('Qapital Atlas'), ...headerSignOut() }}
       />
     </Stack.Navigator>
   )

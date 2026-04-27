@@ -12,7 +12,7 @@ const FEATURES: {
   },
   {
     title: 'Optional account linking',
-    body: 'Connect your institutions when you want North to read balances; you can also explore with sample data first.',
+    body: 'Connect your institutions when you want Qapital Atlas to read balances; you can also explore with sample data first.',
   },
   {
     title: 'Trial, then a clear plan',
@@ -28,12 +28,12 @@ export function Landing() {
   return (
     <div className="landing">
       <header className="landing__hero flow">
-        <h1 className="landing__brand">North</h1>
+        <h1 className="landing__brand">Qapital Atlas</h1>
         <p className="landing__tagline">
           See where you are headed, not every coffee purchase.
         </p>
         <p className="flow__lead text-muted">
-          North is a calm place to check direction on your money: net worth, pace, and
+          Qapital Atlas is a calm place to check direction on your money: net worth, pace, and
           a few high-signal focus areas—so you and anyone you plan with can stay
           aligned without building another spreadsheet.
         </p>
@@ -49,7 +49,7 @@ export function Landing() {
 
       <section className="landing__section" aria-labelledby="can-do-heading">
         <h2 id="can-do-heading" className="flow__sub">
-          What you can do with North
+          What you can do with Qapital Atlas
         </h2>
         <div className="cards">
           {FEATURES.map((f) => (
@@ -80,7 +80,7 @@ export function Landing() {
 
       <p className="flow__footer text-muted small">
         In this build, some steps are simulated in your browser. Linking to banks and
-        live data are optional next steps—North is a prototype for the product direction.
+        live data are optional next steps—Qapital Atlas is a prototype for the product direction.
       </p>
     </div>
   )

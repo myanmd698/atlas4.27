@@ -49,7 +49,7 @@ export function ConnectAccounts() {
     <div className="flow">
       <h1 className="flow__title">Link your accounts (optional)</h1>
       <p className="flow__lead text-muted">
-        Connect with Plaid so North can read balances and keep your summary
+        Connect with Plaid so Qapital Atlas can read balances and keep your summary
         up to date. In this prototype, <strong>Link accounts</strong> simulates
         a successful connect—you still see the same sample insights either way.
       </p>

@@ -69,7 +69,7 @@ export function ConnectScreen({ navigation }: Props) {
     >
       <Text style={styles.h1}>Link your accounts (optional)</Text>
       <Text style={styles.lead}>
-        Connect with Plaid so North can read balances and keep your summary up to
+        Connect with Plaid so Qapital Atlas can read balances and keep your summary up to
         date. In this prototype, Link accounts simulates a successful
         connect—you still see the same sample insights either way.
       </Text>

@@ -16,7 +16,7 @@ Single reference for what the app is, how data moves, and how users move through
 |------|---------|
 | `/` | Marketing **landing** if signed out; otherwise redirects to the next onboarding step or dashboard |
 | `/signup` | Create account (redirects here if already signed in to the correct step) |
-| `/onboarding/connect` | Optional mock “link accounts” |
+| `/onboarding/connect` | Mock **Plaid** linking: account-type categories → institution list → simulated link → summary of connected accounts (optional skip) |
 | `/onboarding/subscribe` | Choose plan + trial / Adyen checkout |
 | `/onboarding/why` | Primary reason selection |
 | `/dashboard` | Insights summary (requires completed onboarding) |
@@ -34,8 +34,11 @@ Session is stored in **localStorage** under `atlas_v2` as JSON (`AppSession`).
 | `userId`, `token`, `email` | From registration |
 | `onboardingStep` | `connect` → `subscribe` → `reasons` → `complete` |
 | `primaryReasonId` | Selected reason id after reasons step |
-| `accountsLinked` | Whether user chose mock link vs skip |
+| `accountsLinked` | Set by `POST /api/accounts/link`: `true` after **Continue** from connect (mock link complete), `false` after **Skip for now** |
+| `linkedAccounts` | Array of mock linked rows (`LinkedAccount[]`), client-only; see below |
 | `subscriptionPlan`, `subscriptionStatus`, `trialEndsAt` | After subscribe confirmation |
+
+**`LinkedAccount` (types in `src/lib/linkedAccounts.ts`):** `id`, `institutionId`, `institutionName`, `name`, `mask` (last four), `subtype`, `category` (`banking` \| `investment` \| `credit_card` \| `crypto`). Populated when the user completes a simulated institution link on `/onboarding/connect`; cleared when they skip from the category screen. Not sent to the API—the server still only receives `link` vs `skip`.
 
 **Resume behavior:** `nextOnboardingPath(session)` maps `onboardingStep` to the correct path so returning users skip finished steps.
 
@@ -55,15 +58,34 @@ flowchart LR
   Landing -->|signed out| Landing
   Landing -->|signed in| Connect
   SignUp --> Connect
-  Connect --> Subscribe
+  Connect -->|"Continue or Skip"| Subscribe
   Subscribe --> Why
   Why --> Dash
 ```
 
-1. **Sign up** — `POST` registration; session defaults to `onboardingStep: 'connect'`.
-2. **Connect** — User links (mock) or skips → step becomes `subscribe`.
+1. **Sign up** — `POST` registration; session defaults to `onboardingStep: 'connect'` and `linkedAccounts: []`.
+2. **Connect** (`src/routes/ConnectAccounts.tsx`) — Single route, multi-phase UI:
+   - **Categories:** Banking, Investment, Credit card, Crypto (`src/data/mockPlaidInstitutions.ts`).
+   - **Institutions:** Static list per category; **Back** returns to categories without clearing prior links.
+   - **Linking:** Short delay (~600ms), then append mock accounts via `mockAccountsForLink()` (same module).
+   - **Summary:** Accounts grouped by institution (name + mask). **Link another account** returns to categories and keeps `linkedAccounts`. **Continue** calls `POST /api/accounts/link` with `action: "link"`, sets `accountsLinked: true`, step `subscribe`, navigates to `/onboarding/subscribe`. **Skip for now** (from categories) calls `action: "skip"`, clears `linkedAccounts`, sets `accountsLinked` from the response, step `subscribe`.
+   - Refresh while connect is active: if `linkedAccounts.length > 0`, UI opens on the summary phase so mock connections are still visible.
 3. **Subscribe** — Billing session + confirm trial subscription → step becomes `reasons`.
 4. **Why** — Saves primary reason → step becomes `complete` → **Dashboard**.
+
+```mermaid
+flowchart TD
+  cats[Connect: categories]
+  inst[Connect: institutions]
+  link[Connect: simulated Plaid link]
+  sum[Connect: summary]
+  cats --> inst
+  inst --> link
+  link --> sum
+  sum -->|"Link another"| cats
+  sum -->|"Continue"| sub[Subscribe step]
+  cats -->|"Skip"| sub
+```
 
 ---
 
@@ -96,7 +118,9 @@ Authorization: Bearer <token>
 
 **Headers:** Bearer token  
 **Body:** `{ "action": "link" | "skip" }`  
-**Response:** `{ accountsLinked: boolean, linkedAt: string | null }`
+**Response:** `{ accountsLinked: boolean, linkedAt: string | null }`  
+
+Per-account mock data from the connect flow stays in `linkedAccounts` in the client session only; this endpoint does not accept or return institution rows.
 
 #### `GET /api/insights/summary`
 
@@ -147,6 +171,8 @@ Adyen webhook receiver; raw JSON body + optional `HmacSignature` verification. R
 ```bash
 npm install
 npm run dev          # Vite at http://localhost:5173 (typical)
+npm run build        # `tsc -b` then `vite build` → static assets in `dist/`
+npm run preview      # Serve `dist/` locally (optional smoke test after build)
 ```
 
 Optional real billing path:
@@ -165,14 +191,17 @@ npm run dev
 |------|----------|
 | Routes | `src/App.tsx` |
 | Session / steps | `src/lib/session.ts`, `src/lib/redirects.ts` |
+| Linked account types | `src/lib/linkedAccounts.ts` |
+| Mock connect UI + catalog | `src/routes/ConnectAccounts.tsx`, `src/data/mockPlaidInstitutions.ts` |
 | HTTP client | `src/api/client.ts` |
 | Types + mock logic | `src/mocks/apiLogic.ts` |
 | MSW handlers | `src/mocks/handlers.ts` |
 | Billing server | `server/index.mjs` |
 | Pricing constants | `src/lib/pricing.ts` |
+| Global styles (connect tiles, summary) | `src/index.css` |
 
 ---
 
 ## Mobile
 
-A separate React Native app lives under `mobile/` with screens aligned to the same conceptual flow (signup → connect → subscribe → reasons → dashboard); it uses its own session and mock API copies—see that package for mobile-specific behavior.
+A separate React Native app lives under `mobile/` with screens aligned to the same conceptual flow (signup → connect → subscribe → reasons → dashboard); it uses its own session and mock API copies. The web **connect** step described above (categories, institutions, `linkedAccounts`) is web-only unless parity is added in `mobile/`.

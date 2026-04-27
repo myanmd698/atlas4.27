@@ -3,7 +3,7 @@ import { Shell } from './components/Shell'
 import { ConnectAccounts } from './routes/ConnectAccounts'
 import { Dashboard } from './routes/Dashboard'
 import { OnboardingReasons } from './routes/OnboardingReasons'
-import { RootRedirect } from './routes/RootRedirect'
+import { HomeOrRedirect } from './routes/HomeOrRedirect'
 import { SignUp } from './routes/SignUp'
 import { Subscribe } from './routes/Subscribe'
 
@@ -12,7 +12,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Shell />}>
-          <Route path="/" element={<RootRedirect />} />
+          <Route path="/" element={<HomeOrRedirect />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/onboarding/why" element={<OnboardingReasons />} />
           <Route path="/onboarding/subscribe" element={<Subscribe />} />

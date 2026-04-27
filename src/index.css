@@ -450,9 +450,83 @@ a {
   stroke: none;
 }
 
+.landing {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding-bottom: 1.5rem;
+}
+
+.landing__hero {
+  margin-bottom: 2.25rem;
+}
+
+.landing__brand {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.landing__tagline {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+  max-width: 36rem;
+}
+
+.landing__cta {
+  margin-top: 0.5rem;
+}
+
+.landing__cta .btn {
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.landing__section {
+  margin-bottom: 2rem;
+}
+
+.landing__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.landing__list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 0.75rem 0.9rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.landing__list-title {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 @media (min-width: 32rem) {
   .kpi__delta {
     display: inline;
     margin-left: 0.4rem;
+  }
+
+  .landing__cta.stack {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }

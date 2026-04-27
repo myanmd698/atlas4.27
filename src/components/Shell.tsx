@@ -24,7 +24,7 @@ export function Shell() {
               className="text-btn"
               onClick={() => {
                 clearSession()
-                void nav('/signup', { replace: true })
+                void nav('/', { replace: true })
               }}
             >
               Sign out

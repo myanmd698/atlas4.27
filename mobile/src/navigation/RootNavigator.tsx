@@ -6,6 +6,7 @@ import { colors } from '../theme'
 import { ConnectScreen } from '../screens/ConnectScreen'
 import { DashboardScreen } from '../screens/DashboardScreen'
 import { OnboardingWhyScreen } from '../screens/OnboardingWhyScreen'
+import { OnboardingSubscribeScreen } from '../screens/OnboardingSubscribeScreen'
 import { SignUpScreen } from '../screens/SignUpScreen'
 import type { RootStackParamList } from './types'
 
@@ -56,13 +57,18 @@ export function RootNavigator() {
         options={{ ...screenDef('North'), headerShown: true }}
       />
       <Stack.Screen
-        name="OnboardingWhy"
-        component={OnboardingWhyScreen}
+        name="OnboardingConnect"
+        component={ConnectScreen}
         options={{ ...screenDef('North'), ...headerSignOut() }}
       />
       <Stack.Screen
-        name="OnboardingConnect"
-        component={ConnectScreen}
+        name="OnboardingSubscribe"
+        component={OnboardingSubscribeScreen}
+        options={{ ...screenDef('North'), ...headerSignOut() }}
+      />
+      <Stack.Screen
+        name="OnboardingWhy"
+        component={OnboardingWhyScreen}
         options={{ ...screenDef('North'), ...headerSignOut() }}
       />
       <Stack.Screen

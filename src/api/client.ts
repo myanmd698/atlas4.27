@@ -8,14 +8,14 @@ function withAuth(token: string) {
   return { ...json, Authorization: `Bearer ${token}` } as const
 }
 
-function useNetworkInDev() {
+function isDevWithMsw() {
   return import.meta.env.DEV
 }
 
 export async function register(
   body: apiLogic.RegisterBody,
 ): Promise<apiLogic.RegisterResponse> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/auth/register`, {
       method: 'POST',
       headers: json,
@@ -31,7 +31,7 @@ export async function savePrimaryReason(
   reasonId: string,
   token: string,
 ): Promise<void> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/onboarding/primary-reason`, {
       method: 'POST',
       headers: withAuth(token),
@@ -47,7 +47,7 @@ export async function linkAccounts(
   action: 'link' | 'skip',
   token: string,
 ): Promise<{ accountsLinked: boolean; linkedAt: string | null }> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/accounts/link`, {
       method: 'POST',
       headers: withAuth(token),
@@ -62,7 +62,7 @@ export async function linkAccounts(
 export async function getInsightsSummary(
   token: string,
 ): Promise<apiLogic.InsightsSummary> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/insights/summary`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -76,7 +76,7 @@ export async function createBillingSession(
   body: apiLogic.AdyenSessionBody,
   token: string,
 ): Promise<apiLogic.BillingSessionResponse> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/billing/adyen/session`, {
       method: 'POST',
       headers: withAuth(token),
@@ -95,7 +95,7 @@ export async function confirmSubscription(
   body: apiLogic.ConfirmSubscriptionBody,
   token: string,
 ): Promise<apiLogic.ConfirmSubscriptionResponse> {
-  if (useNetworkInDev()) {
+  if (isDevWithMsw()) {
     const r = await fetch(`${API}/billing/adyen/confirm`, {
       method: 'POST',
       headers: withAuth(token),

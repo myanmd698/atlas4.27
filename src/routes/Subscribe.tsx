@@ -43,22 +43,18 @@ export function Subscribe() {
   const payContainerRef = useRef<HTMLDivElement>(null)
   const dropinRef = useRef<{ unmount: () => void } | null>(null)
 
-  const redirect = guard(s)
-  if (s == null) return <Navigate to={redirect} replace />
-  if (s.onboardingStep !== 'subscribe') {
-    return <Navigate to={redirect} replace />
-  }
-  const sessionData = s
-
   const afterConfirm = useCallback(
     async (body: { plan: SubscriptionPlan; paymentReference?: string }) => {
+      const cur = loadSession()
+      if (cur == null) return
+      if (cur.onboardingStep !== 'subscribe') return
       const res = await api.confirmSubscription(
         {
           plan: body.plan,
-          userId: sessionData.userId,
+          userId: cur.userId,
           paymentReference: body.paymentReference,
         },
-        sessionData.token,
+        cur.token,
       )
       updateSession({
         subscriptionPlan: res.plan,
@@ -68,10 +64,12 @@ export function Subscribe() {
       })
       navigate('/onboarding/why', { replace: true })
     },
-    [navigate, sessionData.token, sessionData.userId],
+    [navigate],
   )
 
   const startSession = useCallback(async () => {
+    const cur = loadSession()
+    if (cur == null) return
     setErr(null)
     setBusy(true)
     setSession(null)
@@ -83,10 +81,10 @@ export function Subscribe() {
       const res = await api.createBillingSession(
         {
           plan,
-          userId: sessionData.userId,
-          email: sessionData.email,
+          userId: cur.userId,
+          email: cur.email,
         },
-        sessionData.token,
+        cur.token,
       )
       setSession(res)
     } catch (caught: unknown) {
@@ -98,7 +96,7 @@ export function Subscribe() {
     } finally {
       setBusy(false)
     }
-  }, [plan, sessionData.email, sessionData.token, sessionData.userId])
+  }, [plan])
 
   useEffect(() => {
     if (!session || session.mode !== 'live') {
@@ -110,6 +108,8 @@ export function Subscribe() {
       setErr('Invalid payment session from the server.')
       return
     }
+    const loggedIn = loadSession()
+    const shopperEmail = loggedIn?.email ?? ''
 
     let cancelled = false
     void (async () => {
@@ -117,7 +117,7 @@ export function Subscribe() {
       const core = await AdyenCheckout({
         clientKey,
         environment: mapEnvironment(environment),
-        session: { id, sessionData: sData, shopperEmail: sessionData.email },
+        session: { id, sessionData: sData, shopperEmail },
         onPaymentCompleted: (result) => {
           const ref = (result as { merchantReference?: string })
             .merchantReference
@@ -134,11 +134,15 @@ export function Subscribe() {
           })()
         },
         onPaymentFailed: (fail) => {
-          setErr(
-            (fail as { message?: string })?.message != null
-              ? String((fail as { message: string }).message)
-              : 'Payment was not successful.',
-          )
+          if (fail && typeof fail === 'object' && 'message' in fail) {
+            setErr(String((fail as { message: string }).message))
+            return
+          }
+          if (fail && typeof fail === 'object' && 'resultCode' in fail) {
+            setErr(`Payment failed (${String((fail as { resultCode: string }).resultCode)}).`)
+            return
+          }
+          setErr('Payment was not successful.')
         },
         onError: (e) => {
           if (e?.message) setErr(e.message)
@@ -158,7 +162,13 @@ export function Subscribe() {
         dropinRef.current = null
       }
     }
-  }, [afterConfirm, plan, session, sessionData.email])
+  }, [afterConfirm, plan, session])
+
+  const redirect = guard(s)
+  if (s == null) return <Navigate to={redirect} replace />
+  if (s.onboardingStep !== 'subscribe') {
+    return <Navigate to={redirect} replace />
+  }
 
   async function onMockStartTrial() {
     setErr(null)

@@ -63,7 +63,7 @@ export function SignUpScreen({ navigation }: Props) {
         email: r.email,
       })
       await refresh()
-      navigation.replace('OnboardingWhy')
+      navigation.replace('OnboardingConnect')
     } catch (caught: unknown) {
       setErr(caught instanceof Error ? caught.message : 'Something went wrong.')
     } finally {

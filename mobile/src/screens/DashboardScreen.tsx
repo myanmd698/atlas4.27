@@ -57,7 +57,7 @@ export function DashboardScreen({ navigation }: Props) {
         )
       }
     })()
-  }, [session?.token, session?.onboardingStep])
+  }, [session, session?.token, session?.onboardingStep])
 
   if (session == null || session.onboardingStep !== 'complete') {
     return <View style={styles.center}><ActivityIndicator color={colors.accent} /></View>

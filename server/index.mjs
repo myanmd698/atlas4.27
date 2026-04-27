@@ -37,9 +37,8 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization', 'HmacSignature'],
   }),
 )
-app.use(express.json())
 
-// --- Adyen HMAC (standard webhooks) ---
+// --- Adyen HMAC: register before express.json() so the raw body is intact ---
 app.post(
   '/api/billing/adyen/webhook',
   express.text({ type: 'application/json', limit: '1mb' }),
@@ -72,9 +71,11 @@ app.post(
     res
       .status(200)
       .set('Content-Type', 'text/plain')
-      .send("[accepted]") // Adyen v3-style; some use JSON — adjust per your CA settings
+      .send("[accepted]")
   },
 )
+
+app.use(express.json())
 
 app.post('/api/billing/adyen/confirm', (req, res) => {
   if (!hasBearer(req)) {

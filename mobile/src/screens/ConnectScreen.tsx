@@ -43,11 +43,11 @@ export function ConnectScreen({ navigation }: Props) {
     try {
       const res = await setAccounts({ action })
       await updateSession({
-        onboardingStep: 'complete',
+        onboardingStep: 'subscribe',
         accountsLinked: res.accountsLinked,
       })
       await refresh()
-      navigation.replace('Dashboard')
+      navigation.replace('OnboardingSubscribe')
     } catch (caught: unknown) {
       setErr(
         caught instanceof Error ? caught.message : 'Could not continue.',

@@ -2,8 +2,9 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 export type RootStackParamList = {
   SignUp: undefined
-  OnboardingWhy: undefined
   OnboardingConnect: undefined
+  OnboardingSubscribe: undefined
+  OnboardingWhy: undefined
   Dashboard: undefined
 }
 

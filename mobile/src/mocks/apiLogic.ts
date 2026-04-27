@@ -1,3 +1,5 @@
+import { TRIAL_DAYS, type SubscriptionPlan } from '../lib/pricing'
+
 /** Mock API for the native prototype (same contract as the web app). */
 export type RegisterBody = { email: string; password: string }
 
@@ -10,6 +12,19 @@ export type RegisterResponse = {
 export type PrimaryReasonBody = { reasonId: string }
 
 export type LinkBody = { action: 'link' | 'skip' }
+
+export type ConfirmSubscriptionBody = {
+  plan: SubscriptionPlan
+  userId: string
+  paymentReference?: string
+}
+
+export type ConfirmSubscriptionResponse = {
+  ok: true
+  subscriptionStatus: 'trialing'
+  trialEndsAt: string
+  plan: SubscriptionPlan
+}
 
 export type InsightsSummary = {
   asOf: string
@@ -83,4 +98,18 @@ const insights: InsightsSummary = {
 export async function getInsightsSummary(): Promise<InsightsSummary> {
   await delay(200)
   return { ...insights, asOf: new Date().toISOString().slice(0, 10) }
+}
+
+export async function confirmSubscription(
+  body: ConfirmSubscriptionBody,
+): Promise<ConfirmSubscriptionResponse> {
+  await delay(300)
+  const end = new Date()
+  end.setDate(end.getDate() + TRIAL_DAYS)
+  return {
+    ok: true,
+    subscriptionStatus: 'trialing',
+    trialEndsAt: end.toISOString(),
+    plan: body.plan,
+  }
 }

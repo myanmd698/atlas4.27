@@ -54,6 +54,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// Hook colocated with provider in this small app.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useSession(): Ctx {
   const c = useContext(SessionContext)
   if (c == null) {

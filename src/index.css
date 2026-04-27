@@ -318,6 +318,132 @@ a {
   gap: 0.6rem;
 }
 
+.connect-actions {
+  margin-top: 0.5rem;
+}
+
+.connect-cats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  max-width: 22rem;
+}
+
+.connect-cats__tile {
+  font: inherit;
+  font-weight: 600;
+  padding: 1rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+  color: var(--text);
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.connect-cats__tile:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(61, 139, 122, 0.08);
+}
+
+.connect-inst-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  max-width: 24rem;
+}
+
+.connect-inst-list__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font: inherit;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--bg-elev);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.connect-inst-list__row:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.connect-inst-list__name {
+  font-weight: 600;
+}
+
+.connect-inst-list__chev {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.connect-summary {
+  margin-bottom: 1.25rem;
+  max-width: 26rem;
+}
+
+.connect-summary__group {
+  margin-bottom: 1.25rem;
+}
+
+.connect-summary__group:last-child {
+  margin-bottom: 0;
+}
+
+.connect-summary__inst {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.45rem;
+  color: var(--text);
+}
+
+.connect-summary__accounts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+
+.connect-summary__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.connect-summary__row:last-child {
+  border-bottom: 0;
+}
+
+.connect-summary__acct {
+  font-weight: 500;
+}
+
+.connect-summary__mask {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+
+.btn--compact {
+  padding: 0.45rem 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
 /* Dashboard */
 .dashboard__head {
   margin-bottom: 1.25rem;

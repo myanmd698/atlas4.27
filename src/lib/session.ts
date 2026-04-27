@@ -1,4 +1,7 @@
+import type { LinkedAccount } from './linkedAccounts'
 import type { SubscriptionPlan } from './pricing'
+
+export type { LinkedAccount } from './linkedAccounts'
 
 const KEY = 'atlas_v2'
 const LEGACY_KEY = 'atlas_v1'
@@ -19,6 +22,8 @@ export type AppSession = {
   primaryReasonId: string | null
   /** User tapped mock “link” */
   accountsLinked: boolean
+  /** Mock Plaid-linked accounts (client-only prototype) */
+  linkedAccounts: LinkedAccount[]
   subscriptionPlan: SubscriptionPlan | null
   subscriptionStatus: SubscriptionStatus
   /** ISO date string when the paid period starts after trial */
@@ -45,6 +50,7 @@ function defaultSession(p: {
     onboardingStep: 'connect',
     primaryReasonId: null,
     accountsLinked: false,
+    linkedAccounts: [],
     subscriptionPlan: null,
     subscriptionStatus: 'none',
     trialEndsAt: null,
@@ -63,6 +69,7 @@ function migrateAndClearLegacy(raw: string): AppSession | null {
         onboardingStep: 'complete',
         primaryReasonId: s.primaryReasonId,
         accountsLinked: s.accountsLinked,
+        linkedAccounts: [],
         subscriptionPlan: null,
         subscriptionStatus: 'active',
         trialEndsAt: null,
@@ -93,6 +100,7 @@ function normalizeV2(raw: string): AppSession | null {
       onboardingStep: s.onboardingStep,
       primaryReasonId: s.primaryReasonId ?? null,
       accountsLinked: s.accountsLinked ?? false,
+      linkedAccounts: Array.isArray(s.linkedAccounts) ? s.linkedAccounts : [],
       subscriptionPlan: s.subscriptionPlan ?? null,
       subscriptionStatus:
         s.subscriptionStatus ??
